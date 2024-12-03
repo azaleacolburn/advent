@@ -30,8 +30,7 @@ pub fn main() {
                 * right
                     .iter()
                     .filter(|right_num| *left_num == **right_num)
-                    .collect::<Vec<&i32>>()
-                    .len() as i32
+                    .count() as i32
         })
         .sum();
     println!("{sim}");
