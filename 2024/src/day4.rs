@@ -1,28 +1,100 @@
 use std::fs;
 
+#[allow(unused_mut)]
 pub fn main() {
     let buff = fs::read_to_string("./inputs/day4.txt").unwrap();
     let mut matrix: Vec<Vec<char>> = buff
         .trim()
         .split('\n')
-        .map(|row| row.trim().chars().collect::<Vec<char>>())
+        .map(|row| {
+            row.trim()
+                .chars()
+                .map(|c| c.to_ascii_lowercase())
+                .collect::<Vec<char>>()
+        })
         .collect::<Vec<Vec<char>>>();
-    let buff = matrix_format(&matrix).join("\n");
-    println!("{buff}");
-    let mut count = count_matches(
-        matrix
-            .iter()
-            .map(|row| row.iter().collect::<String>())
-            .collect::<Vec<String>>(),
-    );
-    for i in 0..7 {
-        matrix = rotate_45(&matrix, i);
-        let buff = matrix_format(&matrix);
-        println!("{}", buff.join("\n"));
-        count += count_matches(buff);
+    let mut count = 0;
+    for i in 1..matrix.len() - 1 {
+        for j in 1..matrix.len() - 1 {
+            //            println!(" {}", matrix[i - 1][j - 1]);
+            if matrix[i][j] != 'a' {
+                continue;
+            }
+            match matrix[i - 1][j - 1] {
+                'm' => {
+                    if (matrix[i - 1][j + 1] == 'm'
+                        && matrix[i + 1][j + 1] == 's'
+                        && matrix[i + 1][j - 1] == 's')
+                        || (matrix[i + 1][j - 1] == 'm'
+                            && matrix[i - 1][j + 1] == 's'
+                            && matrix[i + 1][j + 1] == 's')
+                    {
+                        count += 1;
+                        continue;
+                    }
+                }
+                's' => {
+                    if (matrix[i - 1][j + 1] == 's'
+                        && matrix[i + 1][j + 1] == 'm'
+                        && matrix[i + 1][j - 1] == 'm')
+                        || (matrix[i + 1][j - 1] == 's'
+                            && matrix[i - 1][j + 1] == 'm'
+                            && matrix[i + 1][j + 1] == 'm')
+                    {
+                        count += 1;
+                        continue;
+                    }
+                }
+                _ => {}
+            }
+            match matrix[i + 1][j + 1] {
+                'm' => {
+                    if (matrix[i - 1][j + 1] == 'm'
+                        && matrix[i + 1][j + 1] == 's'
+                        && matrix[i + 1][j - 1] == 's')
+                        || (matrix[i + 1][j - 1] == 'm'
+                            && matrix[i - 1][j + 1] == 's'
+                            && matrix[i + 1][j + 1] == 's')
+                    {
+                        count += 1;
+                        continue;
+                    }
+                }
+                's' => {
+                    if (matrix[i - 1][j + 1] == 's'
+                        && matrix[i + 1][j + 1] == 'm'
+                        && matrix[i + 1][j - 1] == 'm')
+                        || (matrix[i + 1][j - 1] == 's'
+                            && matrix[i - 1][j + 1] == 'm'
+                            && matrix[i + 1][j + 1] == 'm')
+                    {
+                        count += 1;
+                        continue;
+                    }
+                }
+                _ => {}
+            }
+        }
     }
-
     println!("{count}");
+
+    // p. 1
+    // let buff = matrix_format(&matrix).join("\n");
+    // println!("{buff}");
+    // let mut count = count_matches(
+    //     matrix
+    //         .iter()
+    //         .map(|row| row.iter().collect::<String>())
+    //         .collect::<Vec<String>>(),
+    // );
+    // for i in 0..7 {
+    //     matrix = rotate_45(&matrix, i);
+    //     let buff = matrix_format(&matrix);
+    //     println!("{}", buff.join("\n"));
+    //     count += count_matches(buff);
+    // }
+    //
+    // println!("{count}");
 }
 
 fn rotate_45(matrix: &Vec<Vec<char>>, rots: usize) -> Vec<Vec<char>> {
