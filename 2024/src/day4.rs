@@ -2,28 +2,30 @@ use std::fs;
 
 pub fn main() {
     let buff = fs::read_to_string("./inputs/day4.txt").unwrap();
-    let mut count = 0;
     let mut matrix: Vec<Vec<char>> = buff
         .trim()
         .split('\n')
         .map(|row| row.trim().chars().collect::<Vec<char>>())
         .collect::<Vec<Vec<char>>>();
-    count += count_matches(
+    let buff = matrix_format(&matrix).join("\n");
+    println!("{buff}");
+    let mut count = count_matches(
         matrix
             .iter()
             .map(|row| row.iter().collect::<String>())
             .collect::<Vec<String>>(),
     );
-    for i in 0..8 {
+    for i in 0..7 {
         matrix = rotate_45(&matrix, i);
         let buff = matrix_format(&matrix);
+        println!("{}", buff.join("\n"));
         count += count_matches(buff);
     }
 
     println!("{count}");
 }
 
-fn rotate_45<'a>(matrix: &Vec<Vec<char>>, rots: usize) -> Vec<Vec<char>> {
+fn rotate_45(matrix: &Vec<Vec<char>>, rots: usize) -> Vec<Vec<char>> {
     let old_size = matrix.len();
     let mut size = old_size;
     size = size * 2 - 1;
@@ -37,8 +39,8 @@ fn rotate_45<'a>(matrix: &Vec<Vec<char>>, rots: usize) -> Vec<Vec<char>> {
         }
     }
 
-    if rots % 2 == 1 {
-        new_matrix
+    match rots % 2 == 1 {
+        true => new_matrix
             .iter()
             .map(|row| {
                 row.iter()
@@ -47,9 +49,8 @@ fn rotate_45<'a>(matrix: &Vec<Vec<char>>, rots: usize) -> Vec<Vec<char>> {
                     .collect::<Vec<char>>()
             })
             .filter(|row| !row.is_empty())
-            .collect()
-    } else {
-        new_matrix
+            .collect(),
+        false => new_matrix,
     }
 }
 
@@ -66,8 +67,7 @@ fn count_matches(buff: Vec<String>) -> usize {
         acc + regex::Regex::new(r"XMAS")
             .unwrap()
             .find_iter(row)
-            .map(|m| m.as_str().to_string())
-            .collect::<Vec<String>>()
+            .collect::<Vec<_>>()
             .len()
     })
 }
