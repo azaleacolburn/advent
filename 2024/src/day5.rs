@@ -13,8 +13,6 @@ pub fn main() {
         .collect_tuple::<(Vec<&str>, Vec<&str>)>()
         .unwrap();
 
-    println!("{:?}\n{:?}", rules_buff, updates_buff);
-
     let mut rules: HashMap<i32, Vec<i32>> = HashMap::new();
     rules_buff
         .into_iter()
@@ -44,12 +42,10 @@ pub fn main() {
         })
         .collect();
 
-    println!("updages: {:?}", updates);
     // p. 2
     let middle_corrected_sum: i32 = updates
         .into_iter()
         .filter_map(|update| {
-            println!("update: {:?}", update);
             let mut pre_curr: Vec<i32> = vec![];
             let mut was_invalid = false;
             update.iter().for_each(|num| {
@@ -67,10 +63,7 @@ pub fn main() {
                 }
             });
             match was_invalid {
-                true => {
-                    println!("correctly ordered: {:?}\n", pre_curr);
-                    Some(pre_curr[(pre_curr.len() - 1) / 2])
-                }
+                true => Some(pre_curr[(pre_curr.len() - 1) / 2]),
                 false => None,
             }
         })
