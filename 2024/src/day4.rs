@@ -20,34 +20,8 @@ pub fn main() {
             if matrix[i][j] != 'a' {
                 continue;
             }
+
             match matrix[i - 1][j - 1] {
-                'm' => {
-                    if (matrix[i - 1][j + 1] == 'm'
-                        && matrix[i + 1][j + 1] == 's'
-                        && matrix[i + 1][j - 1] == 's')
-                        || (matrix[i + 1][j - 1] == 'm'
-                            && matrix[i - 1][j + 1] == 's'
-                            && matrix[i + 1][j + 1] == 's')
-                    {
-                        count += 1;
-                        continue;
-                    }
-                }
-                's' => {
-                    if (matrix[i - 1][j + 1] == 's'
-                        && matrix[i + 1][j + 1] == 'm'
-                        && matrix[i + 1][j - 1] == 'm')
-                        || (matrix[i + 1][j - 1] == 's'
-                            && matrix[i - 1][j + 1] == 'm'
-                            && matrix[i + 1][j + 1] == 'm')
-                    {
-                        count += 1;
-                        continue;
-                    }
-                }
-                _ => {}
-            }
-            match matrix[i + 1][j + 1] {
                 'm' => {
                     if (matrix[i - 1][j + 1] == 'm'
                         && matrix[i + 1][j + 1] == 's'
