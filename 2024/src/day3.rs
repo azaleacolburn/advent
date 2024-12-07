@@ -12,19 +12,19 @@ pub fn main() {
     let buff = fs::read_to_string("./inputs/day3.txt").unwrap();
     let reg = Regex::new(r"(mul\([0-9]+,[0-9]+\))|(don't\(\))|(do\(\))").unwrap();
     let matches = reg.find_iter(&buff);
-    let mut mode = Mode::On;
+    let mut is_on = true;
     let filtered_instructions = matches
         .map(|insturction| insturction.as_str())
         .filter(|n| match n.chars().nth(2).unwrap() {
             'n' => {
-                mode = Mode::Off;
+                is_on = false;
                 false
             }
             '(' => {
-                mode = Mode::On;
+                is_on = true;
                 false
             }
-            _ => mode == Mode::On,
+            _ => is_on,
         });
     let sum: i32 = filtered_instructions
         .into_iter()
@@ -41,7 +41,6 @@ pub fn main() {
                 .split(",")
                 .map(|n| n.parse::<i32>().unwrap())
                 .collect::<Vec<i32>>();
-            assert_eq!(nums.len(), 2);
 
             nums[0] * nums[1]
         })
